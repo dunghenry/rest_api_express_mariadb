@@ -52,17 +52,20 @@ const userController = {
           }
      },
      updateUser: async (req, res) => {
-          const id = req.params.id;
           try {
+               const id = req.params.id;
                const {email, password, createAt} = req.body;
                const user = await pool.query(getUser, [id]);
+               const data = await pool.query(checkEmail, [email]);
+               const arrId = data.filter((item) => item.id !== +id);
                if (!user[0]?.id) {
                     return res.status(404).json("User not found.");
                }
-               const response = await pool.query(updateUser, [email ?? user[0]?.email, password ?? user[0]?.password, createAt ?? user[0]?.createAt, id]);
-               console.log(response);
+               if (arrId.length){
+                    return res.status(400).json("Email already exists.");
+               }
+               await pool.query(updateUser, [email ?? user[0]?.email, password ?? user[0]?.password, createAt ?? user[0]?.createAt, id]);
                return res.status(200).json("Updated user successfully.");
-
           } catch (error) {
                console.log(error);
                return res.status(500).json(error);

@@ -1,5 +1,5 @@
 const getUsers = 'SELECT * FROM user';
-const checkEmail = 'SELECT email FROM user WHERE email = ?';
+const checkEmail = 'SELECT * FROM user WHERE email = ?';
 const createUser = 'INSERT INTO user(email, password, createAt) VALUES (?, ?, ?)';
 const getUser = 'SELECT * FROM user WHERE id = ?';
 const deleteUser = 'DELETE FROM user WHERE id = ?';
